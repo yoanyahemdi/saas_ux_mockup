@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crawl Results</title>
+</head>
+<body>
+    <h1>Crawl Results</h1>
+    <div id="message" style="margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px; display: none;"></div>
+    <table border="1" id="results-table">
+        <thead>
+            <tr>
+                <th>Domain</th>
+                <th>Method</th>
+                <th>Status</th>
+                <th>Payload</th>
+                <th>Parameters</th>
+            </tr>
+        </thead>
+        <tbody id="results-tbody">
+            <!-- Results will be dynamically inserted here -->
+        </tbody>
+    </table>
+
+    <script>
+        const crawlResults = JSON.parse(localStorage.getItem('crawlResults'));
+        const tbody = document.getElementById('results-tbody');
+        const messageDiv = document.getElementById('message');
+        const table = document.getElementById('results-table');
+
+        if (crawlResults && crawlResults.length > 0) {
+            crawlResults.forEach(result => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${result.domain}</td>
+                    <td>${result.method}</td>
+                    <td>${result.status || 'N/A'}</td>
+                    <td>${result.payload || ''}</td>
+                    <td>${result.params || ''}</td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            // Show count
+            messageDiv.style.display = 'block';
+            messageDiv.style.backgroundColor = '#d4edda';
+            messageDiv.style.color = '#155724';
+            messageDiv.textContent = `Found ${crawlResults.length} tracking request(s)`;
+        } else {
+            // No results found
+            table.style.display = 'none';
+            messageDiv.style.display = 'block';
+            messageDiv.style.backgroundColor = '#fff3cd';
+            messageDiv.style.color = '#856404';
+            messageDiv.textContent = 'No tracking requests detected on this page. The site may not use third-party analytics or advertising tags, or they may be loaded differently.';
+        }
+    </script>
+</body>
+</html>

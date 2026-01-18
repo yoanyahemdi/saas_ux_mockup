@@ -1,0 +1,84 @@
+{
+  "_comment": "UNIVERSAL OUTPUT FORMAT v3 - Enhanced scoring system matching UI mockups",
+  "_structure": "Four sections: solution summary, events (list view), problem_diagnosis (diagnosis tab), event_details (on-click modal)",
+
+  "solution_name": "string - Display name (e.g., 'Facebook Pixel', 'Google Analytics 4', 'TikTok Ads')",
+  "pixel_id": "string - Tracking solution identifier",
+
+  "score": "integer 0-100 - Overall solution health score (displayed in gauge)",
+  "score_label": "string enum - 'High' (90-100) | 'Good' (75-89) | 'Medium' (50-74) | 'Low' (25-49) | 'Critical' (0-24)",
+
+  "events_audited": "integer - Total number of events analyzed",
+  "success_count": "integer - Events with status='success' (green indicator)",
+  "warning_count": "integer - Events with status='warning' (yellow indicator)",
+  "error_count": "integer - Events with status='error' (red indicator)",
+
+  "events": [
+    {
+      "event_id": "integer - Database ID",
+      "event_name": "string - Event type (PageView, Purchase, AddToCart, etc.)",
+      "status": "string enum - 'success' | 'warning' | 'error'",
+      "timestamp": "string ISO8601",
+      "url": "string - Page URL where event fired",
+      "scoring": {
+        "success_count": "integer - Number of successful parameter checks (green circle)",
+        "warning_count": "integer - Number of warnings (yellow circle)",
+        "error_count": "integer - Number of errors (red circle)"
+      },
+      "issue_preview": "array of strings - First 2-3 issue messages"
+    }
+  ],
+
+  "problem_diagnosis": {
+    "summary": {
+      "all_count": "integer - Total parameters analyzed",
+      "success_count": "integer - Parameters with no issues",
+      "warning_count": "integer - Parameters with warnings",
+      "error_count": "integer - Parameters with errors"
+    },
+    "errors": [
+      {
+        "type": "string enum",
+        "count": "integer",
+        "label": "string - Human-readable summary",
+        "affected_event_ids": "array of integers",
+        "learn_more_url": "string URI - optional"
+      }
+    ],
+    "warnings": []
+  },
+
+  "event_details": {
+    "[event_id]": {
+      "event_id": "integer",
+      "event_name": "string",
+      "status": "string enum",
+      "timestamp": "string ISO8601",
+      "url": "string",
+      "scoring": {
+        "success_count": "integer",
+        "warning_count": "integer",
+        "error_count": "integer"
+      },
+      "parameters": [
+        {
+          "name": "string",
+          "value": "any",
+          "status": "string enum - 'success' | 'warning' | 'error'",
+          "message": "string|null"
+        }
+      ],
+      "ecommerce_items": [],
+      "issues": [
+        {
+          "type": "string enum",
+          "severity": "string enum - 'error' | 'warning'",
+          "field": "string|null",
+          "message": "string",
+          "recommendation": "string",
+          "documentation_url": "string URI - optional"
+        }
+      ]
+    }
+  }
+}

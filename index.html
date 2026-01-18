@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tag Insight Crawler</title>
+</head>
+<body>
+    <h1>Tag Insight Crawler</h1>
+    <form id="crawl-form">
+        <label for="url">Enter URL to crawl:</label>
+        <input type="text" id="url" name="url" required>
+        <button type="submit">Crawl</button>
+    </form>
+
+    <script>
+        document.getElementById('crawl-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const url = document.getElementById('url').value;
+            const response = await fetch('/crawl', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `url=${encodeURIComponent(url)}`,
+            });
+
+            if (response.ok) {
+                const results = await response.json();
+                localStorage.setItem('crawlResults', JSON.stringify(results));
+                window.location.href = '/results';
+            } else {
+                let errorMessage = 'Error crawling URL';
+                try {
+                    const errorData = await response.json();
+                    errorMessage = errorData.error || errorMessage;
+                } catch (e) {
+                    errorMessage = await response.text() || errorMessage;
+                }
+                alert(errorMessage);
+            }
+        });
+    </script>
+</body>
+</html>
